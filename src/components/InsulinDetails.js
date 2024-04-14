@@ -41,20 +41,34 @@ export const InsulinPatient = (props) => {
     autoTable(doc, { html: "#my-table" });
     doc.save("Insulin.pdf");
   };
+  const encryptEmailToUrl = (email) => {
+    // Encode email address to Base64
+    const encodedEmail = btoa(email);
+    // URL-encode special characters in the encoded email
+    const urlEncodedEmail = encodeURIComponent(encodedEmail);
+    return urlEncodedEmail;
+  };
+
   useEffect(() => {
-    const id = state.insulinProp;
-    const newEmail = state.insulinProp
-      .replace(".", "")
-      .replace("$", "")
-      .replace("[", "")
-      .replace("]", "")
-      .replace("#", "")
-      .replace("/", "");
+    // const id = state.insulinProp;
+    // const newEmail = state.insulinProp
+    //   .replace(".", "")
+    //   .replace("$", "")
+    //   .replace("[", "")
+    //   .replace("]", "")
+    //   .replace("#", "")
+    //   .replace("/", "");
+    const x = state.details.email;
+    const id = encryptEmailToUrl(x);
 
     axios
-      .get(`${process.env.REACT_APP_API_URL}/getInsulinDetails/${id}`, {
-        email: state.insulinProp,
-      })
+      .get(
+        `${process.env.REACT_APP_API_URL}/getInsulinDetails/${id}`,
+        { withCredentials: true },
+        {
+          email: state.insulinProp,
+        }
+      )
       .then((res) => {
         setexam(res.data);
         console.log("GGGPPMM" + res.data);
@@ -91,7 +105,7 @@ export const InsulinPatient = (props) => {
       <div className="container-main sidebar-margin">
         <h3 className="all-website-font underline">Insulin Entries</h3>
         <h4 className="all-website-font underline">
-          Unique Id: {state.details.email}
+          Patient Id : {state.details.email}
         </h4>
         <button
           className="all-website-font download-button"

@@ -13,39 +13,76 @@ import RequestListItem from "./RequestListItem";
 import "react-toastify/dist/ReactToastify.css";
 import { css } from "glamor";
 toast.configure();
+
 function Main({ user, setUser }) {
   const [patientsList, setPatientsList] = useState(null);
   const [foodList, setFoodList] = useState(null);
   const [exerciseList, setExerciseList] = useState(null);
   const [showLoading, setShowLoading] = useState(false);
-
+  const [docPatients, setDocPatients] = useState(null);
   const [showExerciseDialog, setShowExerciseDialog] = useState(false);
   const [showFoodDialog, setShowFoodDialog] = useState(false);
+  const encryptEmailToUrl = (email) => {
+    // Encode email address to Base64
+    const encodedEmail = btoa(email);
+    // URL-encode special characters in the encoded email
+    const urlEncodedEmail = encodeURIComponent(encodedEmail);
+    return urlEncodedEmail;
+  };
 
   // http://localhost:8080/
-  const getPendings = () => {
+  const getPendings = async () => {
     let endpoints = [
-      `${process.env.REACT_APP_API_URL}/getPendingPatients`,
-      `${process.env.REACT_APP_API_URL}/getPendingFoods`,
-      `${process.env.REACT_APP_API_URL}/getPendingExercises`,
+      `${process.env.REACT_APP_API_URL}/getPendingPatients/${encryptEmailToUrl(
+        user.emails[0].value
+      )}`,
+      `${process.env.REACT_APP_API_URL}/getPendingFoods/${encryptEmailToUrl(
+        user.emails[0].value
+      )}`,
+      `${process.env.REACT_APP_API_URL}/getPendingExercises/${encryptEmailToUrl(
+        user.emails[0].value
+      )}`,
     ];
-
     try {
-      Promise.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
+      // const list= await axios.get(`${process.env.REACT_APP_API_URL}/getListPatients/${user.emails[0].value}`)
+      // localStorage.setItem("patientsList",JSON.stringify(list));
+      // console.log("localSToeere")
+      // console.log(localStorage.getItem("patientsList"));
+      Promise.all(
+        endpoints.map((endpoint) =>
+          axios.get(endpoint, { withCredentials: true })
+        )
+      ).then(
         ([
           { data: patientsList },
           { data: foodList },
           { data: exerciseList },
         ]) => {
-          // console.log(exerciseList);
-          // console.log(exerciseList.length);
-          // console.log(typeof exerciseList);
-
+          console.log("this is the patient's list");
+          console.log(patientsList);
+          console.log(patientsList.length);
+          console.log(typeof patientsList);
           setPatientsList(patientsList);
           setFoodList(foodList);
           setExerciseList(exerciseList);
         }
       );
+
+      // Promise.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
+      //   ([
+      //     { data: patientsList },
+      //     { data: foodList },
+      //     { data: exerciseList },
+      //   ]) => {
+      //     // console.log(exerciseList);
+      //     // console.log(exerciseList.length);
+      //     // console.log(typeof exerciseList);
+
+      //     setPatientsList(patientsList);
+      //     setFoodList(foodList);
+      //     setExerciseList(exerciseList);
+      //   }
+      // );
     } catch (e) {
       console.log(e);
     }

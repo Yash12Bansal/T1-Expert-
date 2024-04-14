@@ -5,6 +5,10 @@ import Button from "react-bootstrap/Button";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
 import axios from "axios";
+import SideNavBar from "./SideNavBar";
+import Loading from "./Loading";
+import download from "../img/download.png";
+
 import { useLocation } from "react-router-dom";
 import {
   Chart,
@@ -62,11 +66,11 @@ var Listid = [];
 
 var Listin = [];
 var uniqueNames = [
-  {
-    CURRENT_BG: "",
-    CURRENT_DATE: "",
-    CURRENT_TIME: "",
-  },
+  // {
+  //   CURRENT_BG: "",
+  //   CURRENT_DATE: "",
+  //   CURRENT_TIME: "",
+  // },
 ];
 const data = {
   labels: Listin,
@@ -122,19 +126,31 @@ export const BgDetails = (props) => {
   //   }
   const [exam, setexam] = useState([]);
   const [bgarr, setbgarr] = useState([]);
+  const encryptEmailToUrl = (email) => {
+    // Encode email address to Base64
+    const encodedEmail = btoa(email);
+    // URL-encode special characters in the encoded email
+    const urlEncodedEmail = encodeURIComponent(encodedEmail);
+    return urlEncodedEmail;
+  };
+
   useEffect(() => {
     console.log("UIOOOOOOOOOOO" + state);
-    const newEmail = state.bgProp
-      .replace(".", "")
-      .replace("$", "")
-      .replace("[", "")
-      .replace("]", "")
-      .replace("#", "")
-      .replace("/", "");
+    const x = state.details.email;
+    const id=encryptEmailToUrl(x);
+
+    // const newEmail = state.bgProp
+
+    // .replace(".", "")
+    //   .replace("$", "")
+    //   .replace("[", "")
+    //   .replace("]", "")
+    //   .replace("#", "")
+    //   .replace("/", "");
 
     axios
       .post(
-        `${process.env.REACT_APP_API_URL}/getPredictionExtraDetails/${newEmail}`,
+        `${process.env.REACT_APP_API_URL}/getPredictionExtraDetails/${id}`,
         {
           email: state.bgProp,
         }
@@ -170,61 +186,78 @@ export const BgDetails = (props) => {
   //   });
 
   return (
-    <div className="App">
-      <h1 className="heading">Blood Glucose Trend</h1>
+    <div className="outmost-scrolling">
+      <SideNavBar details={state.details} email={state.bgprop} />
+      <div className="container-main sidebar-margin">
+        <h3 className="all-website-font underline">Blood Glucose Trend</h3>
+        <h4 className="all-website-font underline">
+          Patient Id : {state.details.email}
+        </h4>
+        <button
+          className="all-website-font download-button"
+          onClick={exporthere}
+        >
+          Download Report
+          <img src={download} width={25} height={25} />
+        </button>
+      {/* <h1 className="heading">Blood Glucose Trend</h1> */}
       {/* {props.match.params.id}           */}
-      <h1 className="heading">Patient: {state.bgProp}</h1>
-      <Button variant="primary" onClick={exporthere}>
+      {/* <h1 className="heading">Patient: {state.bgProp}</h1> */}
+      {/* <Button variant="primary" onClick={exporthere}>
         Download BG Record
-      </Button>
-      {localStorage.getItem("login") == "true" ? (
-        <div>
+      </Button> */}
+      {exam!=null? (
+        <div className="all-website-font">
           {exam.map((varrr) => {
             let tryth = {
-              CURRENT_BG: varrr.CURRENT_BG,
-              CURRENT_DATE: varrr.CURRENT_DATE,
-              CURRENT_TIME: varrr.CURRENT_TIME,
+              CURRENT_BG: varrr.current_bg,
+              CURRENT_DATE: new Date(varrr.date).toLocaleDateString(),
+              CURRENT_TIME: varrr.time,
             };
             let obj = uniqueNames.find(
               (o) =>
-                o.CURRENT_DATE === varrr.CURRENT_DATE &&
-                o.CURRENT_TIME === varrr.CURRENT_TIME
+                o.CURRENT_DATE === new Date(varrr.date).toLocaleDateString() &&
+                o.CURRENT_TIME === varrr.time
             );
             // console.log(obj)
             if (obj == null) {
               uniqueNames.push(tryth);
-              Listid.push(parseInt(varrr.CURRENT_BG, 10) + 1);
-              Listin.push(varrr.CURRENT_DATE);
+              Listid.push(parseInt(varrr.current_bg, 10) + 1);
+              Listin.push(new Date(varrr.date).toLocaleDateString());
             }
           })}
-          <div className="BgGraph">
+          <div className="main">
             {" "}
-            <Line data={data} />
+            <Line className="BgGraph" data={data} />
           </div>
-          <h1 className="heading">Blood Glucose all entries </h1>
+          <h3 className="all-website-font underline">Blood Glucose Entries</h3>
           {
             <table className="BGtable" id="my-table">
-              <tr className="table-bottom">
-                <th>BG</th>
-
-                <th>Current Date</th>
-                <th>Current Time</th>
+              <thead>
+              <tr className="table2">
+                <th>Blood Glucose</th>
+                <th>Date</th>
+                <th>Time</th>
               </tr>
+              </thead>
+              <tbody>              
               {uniqueNames.map((varrr) => (
-                <tr className="table-bottom">
+                <tr>
                   <td>{varrr.CURRENT_BG}</td>
-
                   <td>{varrr.CURRENT_DATE}</td>
                   <td>{varrr.CURRENT_TIME}</td>
                 </tr>
               ))}
+              </tbody>              
             </table>
           }
         </div>
       ) : (
-        <div>Fetching...</div>
+        <Loading/>
       )}
     </div>
+    </div>
+
   );
 };
 

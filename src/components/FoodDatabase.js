@@ -17,12 +17,14 @@ export const FoodDatabase = (props) => {
   // ]);
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/getFoodDatabase`)
+      .get(`${process.env.REACT_APP_API_URL}/getFoodDatabase`, {
+        withCredentials: true,
+      })
       .then((res) => {
         setexam(res.data);
-        console.log(res.data);
-        console.log(res.data.length);
-        console.log(typeof res.data);
+        // console.log(res.data);
+        // console.log(res.data.length);
+        // console.log(typeof res.data);
       });
     // const todoRef = firebase.database().ref('food_entry').child('food_db');
 
@@ -55,48 +57,48 @@ export const FoodDatabase = (props) => {
     <div className="outmost-scrolling">
       <Navbar user={props.user} setUser={props.setUser}></Navbar>
 
-        {exam != null ? (
-          <div>
-      <div className="App container-main monthrecord">
-        <h3 className="all-website-font underline">Food database</h3>
+      {exam != null ? (
+        <div>
+          <div className="App container-main monthrecord">
+            <h3 className="all-website-font underline">Food database</h3>
 
             <div class="main all-website-font">
               <table>
                 <thead>
-                <tr>
-                  <th>Food Name</th>
-                  <th>Carbs</th>
-                  <th>Calories</th>
-                  <th>Fat</th>
-                  <th>Protein</th>
-                </tr>
-                </thead>                
-                <tbody>
-                {exam.map((varrr) => (
                   <tr>
-                    {console.log("XXXW", varrr)}
-
-                    <td>{varrr.name}</td>
-                    <td>{varrr.carbs}</td>
-                    <td>{varrr.calories}</td>
-                    <td>{varrr.fat}</td>
-                    <td>{varrr.protein}</td>
+                    <th>Food Name</th>
+                    <th>Carbs</th>
+                    <th>Calories</th>
+                    <th>Fat</th>
+                    <th>Protein</th>
                   </tr>
-                ))}
-                </tbody>                
+                </thead>
+                <tbody>
+                  {exam.map((varrr) => (
+                    <tr>
+                      {console.log("XXXW", varrr)}
+
+                      <td>{varrr.name}</td>
+                      <td>{varrr.carbs}</td>
+                      <td>{varrr.calories}</td>
+                      <td>{varrr.fat}</td>
+                      <td>{varrr.protein}</td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
           </div>
-          </div>
-        ) : (
-          <Loading/>
-        )}
-        {/* {localStorage.getItem("isAdmin") == "true" ? (
+        </div>
+      ) : (
+        <Loading />
+      )}
+      {/* {localStorage.getItem("isAdmin") == "true" ? (
           <div className="small-text">Fetching</div>
         ) : (
           <div className="small-text">Not Authorised</div>
         )} */}
-      </div>
+    </div>
     // </div>
   );
 };

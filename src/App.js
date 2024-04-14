@@ -5,6 +5,11 @@ import "./App.css";
 import axios from "axios";
 import Unapproved from "./components/Unapproved";
 import Fooddb from "./components/FoodDatabase";
+import Prediction from "./components/PredictionICR";
+import PredictionDetails from "./components/PredictionDetails";
+import EditPrediction from "./components/EditPrediction";
+import AddPrediction from "./components/AddPrediction";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -176,7 +181,7 @@ function App() {
               />
               <Route
                 exact
-                path="/patient-details/:id/record/"
+                path="/patient-details/:id/formattedRecord"
                 element={
                   user ? (
                     <MonthRecord user={user} setUser={setUser} />
@@ -186,16 +191,40 @@ function App() {
                 }
               />
 
-              {/* <Route exact path="/food-database" component={Fooddb} /> */}
-              {/*<Route exact path="/insulin-entries" component= { InsulinEntries }  /> 
-            <Route exact path="/insulin-entries/:id" component= { InsulinPatient }  />   
-            <Route exact path="/patients" component= { Patients }  />   
-            <Route exact path="/prediction" component= { Prediction }  /> 
-            <Route exact path="/prediction/:id" component= { PredictionDetails }  /> 
-            <Route exact path="/prediction-edit/:id" component= { EditPrediction }  /> 
-            <Route exact path="/add-prediction/" component= { AddPrediction }  /> 
-            <Route exact path="/patientlogin/" component= { PatientLogin }  /> 
-            <Route exact path="/single-patient-details/:id" component= { SinglePatientDetail }  />  */}
+              <Route
+                exact
+                path="/patient-details/:id/prediction"
+                element={
+                  user ? (
+                    <PredictionDetails user={user} setUser={setUser} />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              />
+
+              <Route
+                exact
+                path="/prediction-edit/:id"
+                element={
+                  user ? (
+                    <EditPrediction user={user} setUser={setUser} />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              />
+              <Route
+                exact
+                path="/add-prediction"
+                element={
+                  user ? (
+                    <AddPrediction user={user} setUser={setUser} />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              />
             </Routes>
           </switch>
         </section>

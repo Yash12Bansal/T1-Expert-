@@ -24,16 +24,24 @@ export const Patients = (props) => {
   //       id: "",
   //     },
   //   ]
+  const encryptEmailToUrl = (email) => {
+    // Encode email address to Base64
+    const encodedEmail = btoa(email);
+    // URL-encode special characters in the encoded email
+    const urlEncodedEmail = encodeURIComponent(encodedEmail);
+    return urlEncodedEmail;
+  };
+
   const [details, setdetails] = useState([]);
   const [exam, setexam] = useState([]);
   useEffect(() => {
     let endpoints = [
-      `${process.env.REACT_APP_API_URL}/getPatients`,
+      `${process.env.REACT_APP_API_URL}/getPatients/${encryptEmailToUrl(props.user.emails[0].value)}`,
       `${process.env.REACT_APP_API_URL}/getInsulin`,
     ];
 
     try {
-      Promise.all(endpoints.map((endpoint) => axios.get(endpoint))).then(
+      Promise.all(endpoints.map((endpoint) => axios.get(endpoint,{withCredentials:true}))).then(
         ([{ data: details }, { data: exam }]) => {
           console.log(details);
           console.log(exam);
@@ -115,16 +123,16 @@ export const Patients = (props) => {
     const ans=details.find(o=>o.email===email);
     return ans;
   }
-  const encryptEmailToUrl = (email) => {
-    // Encode email address to Base64
-    const encodedEmail = btoa(email);
-    // URL-encode special characters in the encoded email
-    const urlEncodedEmail = encodeURIComponent(encodedEmail);
-    return urlEncodedEmail;
-  };
+  // const encryptEmailToUrl = (email) => {
+  //   // Encode email address to Base64
+  //   const encodedEmail = btoa(email);
+  //   // URL-encode special characters in the encoded email
+  //   const urlEncodedEmail = encodeURIComponent(encodedEmail);
+  //   return urlEncodedEmail;
+  // };
 
   return (
-    <div className="outmost-scrolling">
+    <div className="outmost-scrolling">    
       <Navbar user={props.user} setUser={props.setUser}></Navbar>
       {details != null ? (
         <div className="App container-main all-website-font monthrecord">

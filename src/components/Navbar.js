@@ -82,12 +82,11 @@ function Navbar(props) {
                 </NavLink>
                 {/* <Link to="/latest-news">Latest news</Link> */}
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <NavLink className="all-website-font disabled" to="/prediction">
                   Prediction
                 </NavLink>
-                {/* <Link to="/latest-news">Latest news</Link> */}
-              </li>
+              </li> */}
             </ul>
           </div>
 

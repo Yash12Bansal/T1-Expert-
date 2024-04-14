@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import googleOneTap from "google-one-tap";
 import { useEffect, useState } from "react";
+import GoogleButton from "react-google-button";
 // const options={
 //   client_id=process.env.CLIENT_ID,
 //   auto_select:false,
@@ -31,7 +32,7 @@ function Landing(props) {
     // axios.get(`${process.env.REACT_APP_API_URL}/auth/web/google`).then(res=>{
     //   console.log("Login button response recevied");
     //   console.log(res);
-      
+
     //   if(res.success){
     //     props.setUser(res.user);
     //     navigate("/");
@@ -43,7 +44,12 @@ function Landing(props) {
     // .catch(e=>{
     //   console.log(e);
     // })
-    window.location.href=`${process.env.REACT_APP_API_URL}/auth/web/google`;
+    window.open(
+      `${process.env.REACT_APP_API_URL}/auth/web/google/callback`,
+      "_self"
+    );
+
+    // window.location.href=`${process.env.REACT_APP_API_URL}/auth/web/google/callback`;
     // auth/google/callback
     // const access_token = response.accessToken;
     // const tokenSend = { access_token };
@@ -192,8 +198,6 @@ function Landing(props) {
   //   let user = firebase.auth().currentUser;
 
   return (
-    // <div></div>
-
     <div className="parent">
       <div className="landing-page"></div>
       <div className="WgciCg LCN0VA"> </div>
@@ -202,15 +206,7 @@ function Landing(props) {
         <div className="_2pukyg">
           <div className="Ft_8Cg a6f7yQ"></div>
           <div className="IMy50w a6f7yQ">
-            {/* <div className="theme dark"> */}
-            {/* <header className="_VxbfQ _0ukAdA"> */}
-            {/* <div className="_0TczQQ">
-                    <div className="IDdBMg"> */}
             <div className="x-large">T1 Expert</div>
-            {/* </div>
-                  </div> */}
-            {/* </header> */}
-            {/* </div> */}
           </div>
         </div>
       </div>
@@ -220,8 +216,42 @@ function Landing(props) {
           <h4 className="all-website-arapey-font bold-font">
             Welcome to T1 Expert!
           </h4>
+
           <div className="google-button-container">
-            <GoogleOAuthProvider
+            {/* <GoogleOAuthProvider> 
+               <GoogleLogin
+              onClick={googleAuth}
+              ux_mode="redirect"
+              shape="pill"
+
+              theme="filled_blue"
+              use_fedcm_for_prompt={false}
+              ic
+              >
+
+              </GoogleLogin> 
+             </GoogleOAuthProvider> */}
+            <GoogleButton
+              onClick={googleAuth}
+              className="google-button"
+              type="dark"
+              label="Continue with Google"
+            ></GoogleButton>
+          </div>
+
+          <p className="all-website-arapey-font">
+            By continuing, you agree to T1 Expert's <u>Terms of Use.</u>
+            <br></br>
+            Read our <u>Privacy Policy.</u>
+          </p>
+          <p className="all-website-arapey-font"></p>
+        </div>
+      </div>
+    </div>
+  );
+}
+{
+  /* <GoogleOAuthProvider
               className="button-google"
               clientId="550164351391-fg3sngb21tjll7vm0gsd36vdut270n1r.apps.googleusercontent.com"
             >
@@ -235,41 +265,7 @@ function Landing(props) {
                   console.log("Login Failed");
                 }}
               />
-            </GoogleOAuthProvider>
-          </div>
-
-          <p className="all-website-arapey-font">
-            By continuing, you agree to T1 Expert's <u>Terms of Use.</u>
-            <br></br>
-            Read our <u>Privacy Policy.</u>
-          </p>
-          <p className="all-website-arapey-font"></p>
-        </div>
-      </div>
-      {/* <button className="button-login" onClick={this.googleAuth}> */}
-      {/* Admin Login */}
-      {/* </button> */}
-      {/* {this.state.isLogin == "true" ? (
-            <div>{this.check()}</div>
-          ) : (
-            <div></div>
-          )}
-          {localStorage.getItem("login") == "true" &&
-          localStorage.getItem("isAdmin") == "true" ? (
-            <div className="small-text">
-              Welcome {this.state.name} <br></br>login success{" "}
-            </div>
-          ) : (
-            <div className="small-text">
-              Not Authorised <br></br>Login first
-            </div>
-          )}
-
-          <br></br>
-          {this.state.displayName} */}
-    </div>
-  );
-  // }
+            </GoogleOAuthProvider> */
 }
 
 export default Landing;

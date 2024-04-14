@@ -66,6 +66,14 @@ export const PatientDetails = (props) => {
         // console.log(typeof res.data);
       });
   };
+  const encryptEmailToUrl = (email) => {
+    // Encode email address to Base64
+    const encodedEmail = btoa(email);
+    // URL-encode special characters in the encoded email
+    const urlEncodedEmail = encodeURIComponent(encodedEmail);
+    return urlEncodedEmail;
+  };
+
 
   const decryptUrlToEmail = (encryptedUrl) => {
     // URL-decode the URL-friendly code
@@ -109,7 +117,7 @@ export const PatientDetails = (props) => {
       <div className="container-main sidebar-margin">
         <h3 className="all-website-font underline">Patient Details</h3>
         <h2 className="head-2 all-website-font underline">
-          Unique Id: {decryptUrlToEmail(email)}
+        Patient Id: {decryptUrlToEmail(email)}
         </h2>
         <div className="main all-website-font">
           <table>
