@@ -454,6 +454,7 @@ nav ul li a {
   margin-right: 30px;
   font-size: 1.7rem;
 }
+
 .dialog-container.open {
   display: flex;
   justify-content: center;

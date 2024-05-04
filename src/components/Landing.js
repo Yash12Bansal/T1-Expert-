@@ -45,7 +45,7 @@ function Landing(props) {
     //   console.log(e);
     // })
     window.open(
-      `${process.env.REACT_APP_API_URL}/auth/web/google/callback`,
+      `${process.env.REACT_APP_API_URL}/auth/web/google`,
       "_self"
     );
 
