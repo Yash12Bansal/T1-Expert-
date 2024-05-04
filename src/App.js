@@ -50,6 +50,7 @@ function App() {
   const getUser = async () => {
     console.log("THIS GET uSER FUNCTION IS CALLED NOW");
     try {
+      
       console.log("THIS IS THE ENV URL  ", process.env.REACT_APP_API_URL);
       const url = `${process.env.REACT_APP_API_URL}/auth/web/login/success`;
       const { data } = await axios.get(url, {
